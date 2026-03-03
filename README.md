@@ -167,7 +167,7 @@ Scoring des zones géographiques via Deep Learning (MLP, LSTM, TabNet, Autoencod
 
 ## Contributors
 - QoS Buddy Team – 4DS8  
-- Eya Rachdi  
+
 
 ---
 
