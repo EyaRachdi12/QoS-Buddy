@@ -1,4 +1,7 @@
-# QoS Buddy – Suite d’Analyse Prédictive pour l’Optimisation de la QoS Télécom
+
+![Python](https://img.shields.io/badge/Python-3.10-blue)
+![Status](https://img.shields.io/badge/Status-Production-green)
+![Esprit](https://img.shields.io/badge/Esprit-School_of_Engineering-red)# QoS Buddy – Suite d’Analyse Prédictive pour l’Optimisation de la QoS Télécom
 
 ## Overview
 
