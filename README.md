@@ -1,197 +1,167 @@
+# 📡 QoS Buddy — BO2: SLA Breach Prevention (B2B)
 
-![Python](https://img.shields.io/badge/Python-3.10-blue)
-![Status](https://img.shields.io/badge/Status-Production-green)
-![Esprit](https://img.shields.io/badge/Esprit-School_of_Engineering-red)
-
-# QoS Buddy – Suite d’Analyse Prédictive pour l’Optimisation de la QoS Télécom
-
-## Overview
-
-Ce projet a été développé dans le cadre du PIDEV – 4ème année ingénierie à Esprit School of Engineering (Année académique 2025–2026).
-
-QoS Buddy est une plateforme avancée d’analyse et de data science dédiée à l’amélioration proactive de la Qualité de Service (QoS) dans les réseaux de télécommunication.  
-Le projet suit la méthodologie **TDSP (Team Data Science Process)** afin d’assurer une approche structurée, reproductible et alignée sur les objectifs métiers.
+<p align="center">
+  <img src="https://img.shields.io/badge/Project-QoSBuddy-blue?style=for-the-badge&logo=wifi" />
+  <img src="https://img.shields.io/badge/Domain-Telecom%205G-green?style=for-the-badge&logo=antenna" />
+  <img src="https://img.shields.io/badge/ML-Early%20Warning%20System-orange?style=for-the-badge&logo=tensorflow" />
+  <img src="https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python" />
+</p>
 
 ---
 
-# 1️⃣ Introduction – Business Understanding (TDSP Phase 1)
+## 🎯 Objective
 
-La phase *Business Understanding* constitue l’étape fondamentale du TDSP.  
-Elle définit :
+**QoS Buddy — BO2** is a machine learning pipeline designed to **predict SLA violations in advance** for B2B telecom clients using real 5G network time-series KPIs.
 
-- Le périmètre du projet QoS Buddy  
-- Le problème métier réel  
-- Les objectifs business mesurables  
-- Leur traduction en objectifs data science  
-- Les KPIs stratégiques  
+> The `label` column is 100% NaN in the raw dataset → the SLA target is **entirely constructed** from KPI-based rules (p10/p90 percentile thresholds).
 
 ---
 
-## 1.1 Contexte et Problématique
+## 📦 Dataset
 
-Les réseaux télécom modernes doivent garantir une haute qualité de service pour :
+| Field | Value |
+|---|---|
+| **Source** | [`AliMaatouk/TelecomTS`](https://huggingface.co/datasets/AliMaatouk/TelecomTS) |
+| **Type** | 5G multi-KPI time series |
+| **Format** | Chunked JSONL |
 
-- Voix
-- Données mobiles
-- Vidéo
-- Services entreprise (B2B)
+### 📶 KPIs Used
 
-En pratique, des dégradations peuvent survenir rapidement :
-
-- Congestion réseau
-- Pannes radio
-- Interférences
-- Coupures fibre
-- Saturation transport
-
-### Observation opérationnelle clé
-
-Il arrive fréquemment que **le client détecte la dégradation avant le NOC (Network Operations Center)**.
-
-Conséquences :
-
-- Augmentation des plaintes et tickets
-- Risques de pénalités SLA (B2B)
-- Temps de résolution plus long
-- Investissements parfois mal ciblés (CAPEX/OPEX)
-
-### Problème central
-
-Comment améliorer durablement la qualité réseau en :
-
-- Détectant plus tôt les dégradations  
-- Réduisant le temps de résolution  
-- Prévenant les violations SLA  
-- Guidant objectivement les décisions d’investissement ?
+| Category | KPIs |
+|---|---|
+| **Radio** | `RSRP`, `UL_SNR`, `DL_MCS`, `UL_MCS`, `UL_NPRB` |
+| **Error Rates** | `DL_BLER`, `UL_BLER` |
+| **Throughput** | `TX_Bytes`, `RX_Bytes`, `DL_NumberOfPackets`, `UL_NumberOfPackets` |
+| **Resources** | `PRBs_DL_Current`, `PRBs_UL_Current`, `PRB_Utilization_DL`, `PRB_Utilization_UL`, `Estimated_UL_Buffer` |
 
 ---
 
-## 1.2 Objectifs Business et Data Science
+## 🏗️ Pipeline Overview
 
-### 🎯 Objectifs Business (BO)
-
-- **BO1** – Optimiser la qualité réseau avant impact client  
-- **BO2** – Prévenir les violations SLA (notamment B2B)  
-- **BO3** – Investir aux bons endroits (smart CAPEX)  
-- **BO4** – Automatiser le reporting réseau  
-- **BO5** – Accélérer la prise de décision via indicateurs data-driven  
-
----
-
-### 🤖 Objectifs Data Science (ODS)
-
-- **ODS1 (BO1)** – Détection d’anomalies QoS/QoE  
-- **ODS2 (BO2)** – Prédiction du risque de violation SLA  
-- **ODS3 (BO3)** – Scoring CAPEX & classement des zones  
-- **ODS4 (BO4)** – Génération automatique de rapports  
-- **ODS5 (BO5)** – Production d’indicateurs synthétiques pour décision rapide  
-
----
-
-## 1.3 Objectifs de Développement Durable (SDGs)
-
-Le projet s’aligne avec 3 SDGs majeurs :
-
-- **SDG 9 – Industry, Innovation and Infrastructure**  
-- **SDG 11 – Sustainable Cities and Communities**  
-- **SDG 12 – Responsible Consumption and Production**  
-
-QoS Buddy contribue à une infrastructure numérique plus fiable, durable et optimisée.
-
----
-
-# 2️⃣ Méthodologie – TDSP
-
-Le projet suit la méthodologie **Team Data Science Process (TDSP)**.
-
-### Les 5 phases TDSP :
-
-1. Business Understanding  
-2. Data Acquisition & Understanding  
-3. Modeling  
-4. Deployment  
-5. Customer Acceptance  
-
-Cette approche garantit :
-
-- Alignement business ↔ analytique  
-- Reproductibilité  
-- Traçabilité  
-- Responsabilité  
+```
+TelecomTS Dataset
+      │
+      ▼
+① Imports & Setup
+      │
+      ▼
+② Dataset Loading (HuggingFace)
+      │
+      ▼
+③ Series Extraction & Flattening
+      │
+      ▼
+④ Exploratory Data Analysis
+      │
+      ▼
+⑤ Cleaning & Imputation
+      │
+      ▼
+⑥ SLA Target Construction (p10/p90 thresholds)
+      │
+      ▼
+⑦ Feature Engineering (TS-safe, per series_id)
+      │
+      ▼
+⑧ Feature Matrix & SLA Correlation
+      │
+      ▼
+⑨ Temporal Split & Scaling (RobustScaler)
+      │
+      ▼
+⑩ Early Warning Targets (15 / 30 / 60 min)
+      │
+      ▼
+⑪ Multi-Model Training & Comparison
+      │
+      ▼
+⑫ Dashboard Export
+```
 
 ---
 
-# 3️⃣ Architecture Fonctionnelle
+## 🏷️ SLA Target Construction
 
-Le système est structuré en 3 blocs métiers :
+Since labels are unavailable, `sla_breach_risk` is built from KPI thresholds:
 
-### 🔹 BO1 – Anomaly Detection (4G)
-Classification supervisée pour détecter les anomalies réseau avant impact client.
-
-### 🔹 BO2 – SLA Early Warning (5G)
-Prédiction multi-horizon (15/30/60 min) des violations SLA.
-
-### 🔹 BO3 – CAPEX Scoring
-Scoring des zones géographiques via Deep Learning (MLP, LSTM, TabNet, Autoencoder).
+| KPI Type | Business Logic | Threshold |
+|---|---|---|
+| `BLER`, `Buffer`, `PRB_Utilization` | High value = problem | > p90 |
+| `RSRP`, `SNR`, `MCS`, `Bytes`, `Packets`, `NPRB`, `PRBs` | Low value = problem | < p10 |
 
 ---
 
-# 4️⃣ Tech Stack
+## 🤖 Models Compared
 
-## Backend / Data Science
-- Python
-- Scikit-learn
-- LightGBM
-- PyTorch
-- TabNet
-- SHAP
+| Model | Notes |
+|---|---|
+| **HistGradientBoostingClassifier** | Baseline — handles NaN natively |
+| **RandomForestClassifier** | Ensemble, robust to outliers |
+| **LogisticRegression** | Linear baseline, interpretable |
+| **XGBClassifier** | Gradient boosting (if xgboost installed) |
+| **LGBMClassifier** | Lightweight boosting (if lightgbm installed) |
 
-## Data & Visualisation
-- Pandas
-- NumPy
-- Matplotlib
-- Seaborn
+**Metrics**: ROC-AUC · PR-AUC · Optimal F1 · Training time
 
 ---
 
-# 5️⃣ Rôles et Responsabilités (TDSP Team)
+## ⏰ Early Warning Horizons
 
-- **Project Manager** — Idi Eya  
-  Planification, gestion des risques, coordination et communication.
-
-- **Project Lead** — Rabeh Mohamed  
-  Supervision technique et qualité scientifique.
-
-- **Solution Architects** — Azzabi Eya, Trabelsi Tassnim  
-  Architecture technique complète (data flow, déploiement, sécurité).
-
-- **Data Scientists** — Rachdi Eya, Omrani Doua  
-  EDA, feature engineering, modélisation, évaluation et interprétabilité.
+| Horizon | Target Column |
+|---|---|
+| 15 minutes | `breach_15min` |
+| 30 minutes | `breach_30min` |
+| 60 minutes | `breach_60min` |
 
 ---
 
-## Contributors
-- QoS Buddy Team – 4DS8  
+## ⚙️ Feature Engineering
 
+All features are computed **per series** (`groupby series_id`) to **prevent data leakage**:
 
----
-
-## Academic Context
-
-Développé à **Esprit School of Engineering – Tunisie**  
-PIDEV – 4DS8 | Année académique 2025–2026  
+- Rolling statistics (mean, std, min, max)
+- `sla_proximity` — how close current KPIs are to SLA thresholds
+- `prealert` — binary flag triggered before a breach window
 
 ---
 
-## Getting Started
+## 🚀 Getting Started
 
-### Installation 
-pip install -r requirements.txt
-### Exécution
-Ouvrir les notebooks dans Jupyter Notebook ou Google Colab.
+### Prerequisites
+
+```bash
+pip install pandas numpy matplotlib seaborn scikit-learn datasets joblib
+pip install xgboost lightgbm  # optional
+```
+
+### Run the Notebook
+
+```bash
+jupyter notebook QoSBuddy_TelecomTS_BO2_MULTI_MODELS.ipynb
+```
 
 ---
 
-## Acknowledgments
+## 📁 Project Structure
 
-Nous remercions le corps enseignant de **Esprit School of Engineering** pour l’encadrement académique et méthodologique.
+```
+📦 QoS-Buddy
+ ┣ 📓 QoSBuddy_TelecomTS_BO2_MULTI_MODELS.ipynb   # Main pipeline notebook
+ ┣ 📄 README.md                                     # This file
+ ┗ 📊 outputs/                                      # Dashboard exports (generated)
+```
+
+---
+
+## 🏫 Academic Context
+
+This project is developed as part of the **Esprit School of Engineering** final-year engineering program (4DS8 — 2026).
+
+**Team**: QoS-Buddy-Team  
+**Organization**: [github.com/orgs/QoS-Buddy-Team](https://github.com/orgs/QoS-Buddy-Team)
+
+---
+
+## 📜 License
+
+This project is for academic and research purposes.
