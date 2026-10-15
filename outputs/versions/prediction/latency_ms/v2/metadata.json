@@ -1,0 +1,45 @@
+{
+  "target": "latency_ms",
+  "features": [
+    "RSRP",
+    "SINR",
+    "PRB_UL",
+    "PRB_DL",
+    "throughput_DL",
+    "throughput_UL",
+    "MOS",
+    "BLER_UL",
+    "BLER_DL",
+    "CQI",
+    "RLC_retransmissions",
+    "handover_success_rate",
+    "hour"
+  ],
+  "metrics": {
+    "mae": 34.85752151131741,
+    "r2": -0.004290017362443832,
+    "rmse": 40.345594197224095,
+    "cv_r2_mean": -0.008062814087694247,
+    "cv_r2_std": 0.0018162611975331502,
+    "n_train": 21250.0,
+    "n_val": 3750.0
+  },
+  "fit_at": "2026-04-14T13:23:58.462640Z",
+  "version": 2,
+  "training_stats": {
+    "feature_importances": {
+      "RSRP": 0.0,
+      "SINR": 0.493590000910572,
+      "PRB_UL": 0.5064099990894281,
+      "PRB_DL": 0.0
+    },
+    "cv_folds": 5,
+    "cv_scores": [
+      -0.005081925551830846,
+      -0.01077386014247761,
+      -0.008462233554263676,
+      -0.007785157671032383,
+      -0.008210893518866724
+    ]
+  }
+}

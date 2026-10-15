@@ -147,3 +147,8 @@ pip install -r requirements.txt
 
 ## 9️⃣ Acknowledgments
 Nous remercions le corps enseignant de Esprit School of Engineering pour l’encadrement académique et méthodologique.
+
+## next step 08/04/2026
+agent simulator 
+login per user 
+improvement(code,visualisations,architecture"sens")

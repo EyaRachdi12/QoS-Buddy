@@ -1,0 +1,237 @@
+# TELECOM NETWORK DIAGNOSTIC KNOWLEDGE BASE
+# QoS Buddy - Causes & Solutions Reference
+
+## PROBLEM 1: CALL DROP (COUPURE D'APPEL) / CALL FAIL (ÉCHEC D'APPEL)
+
+### CAUSES POSSIBLES:
+- Mauvais niveau signal (RSRP mauvais) - typically RSRP < -110 dBm
+- Mauvais SINR / Interférences élevées - SINR < 5 dB indicates severe interference
+- Mauvais handover (handover failed, taux de succès faible) - HO success rate < 85%
+- Overshooting cell - cell coverage extends too far causing interference
+- Mauvais voisinage (missing neighbors) - incomplete neighbor list affects handover success
+- Mauvais tilt / azimut - incorrect antenna orientation
+- Problème VoLTE (SRVCC failure) - Voice over LTE handover issues
+
+### SOLUTIONS:
+- Optimisation tilt mécanique/électrique - adjust antenna tilt angle
+- Ajustement puissance cellule - fine-tune cell transmission power
+- Optimisation liste voisins - update and complete neighbor cell list
+- Optimisation HO (Handover) - adjust handover parameters and thresholds
+- Analyse zone trou de couverture → ajout site / small cell - identify coverage gaps and deploy additional infrastructure
+
+### KEY INDICATORS:
+- RSRP < -110 dBm = Critical signal weakness
+- Handover success rate < 85% = Handover optimization needed
+- SINR < 5 dB = Severe interference problem
+
+
+## PROBLEM 2: MAUVAISE QUALITÉ VOIX (MOS FAIBLE)
+
+### CAUSES:
+- Interférences UL/DL (RSRP) - uplink/downlink interference degrading voice quality
+- BLER élevé - Block Error Rate > 5% indicates transmission errors
+- Mauvais codec - inappropriate or inefficient voice codec selection
+- Congestion PRB - Physical Resource Block congestion > 80%
+- Mauvaise couverture indoor (RSRP) - poor indoor signal penetration
+
+### SOLUTIONS:
+- Activer AMR adaptatif - enable adaptive multi-rate codec
+- Optimiser puissance UL - optimize uplink power control
+- Ajuster scheduler priorité VoLTE - prioritize VoLTE traffic in scheduler
+- Ajouter couche 800/900 MHz pour indoor - deploy low-frequency layer for better indoor penetration
+- Déploiement IBS / small cells - install indoor building systems or small cells
+
+### KEY INDICATORS:
+- MOS < 3.0 = Poor voice quality
+- BLER > 5% = High transmission errors
+- PRB > 80% = Resource congestion affecting voice
+
+
+## PROBLEM 3: DÉBIT FAIBLE (LOW THROUGHPUT)
+
+### CAUSES:
+- SINR faible - poor signal quality (SINR < 10 dB)
+- PRB congestion - resource block utilization > 70%
+- Mauvais CQI - Channel Quality Indicator < 8 indicates poor channel conditions
+- Mauvais MIMO rank - suboptimal MIMO layer utilization
+- Mauvaise bande passante (fréquence non adéquate) - insufficient bandwidth allocation
+
+### SOLUTIONS:
+- Optimisation tilt - adjust antenna tilt for better signal distribution
+- Ajout carrier (CA activation) - activate Carrier Aggregation for more bandwidth
+- Activation 4x4 MIMO - enable advanced MIMO configuration
+- Optimisation paramètres CQI - tune Channel Quality Indicator reporting
+- Augmenter bandwidth (10 → 20 MHz) - increase channel bandwidth
+
+### KEY INDICATORS:
+- Throughput DL < 25 Mbps = Low download speed
+- SINR < 10 dB = Poor signal quality
+- PRB > 70% = Resource congestion
+- CQI < 8 = Poor channel conditions
+
+
+## PROBLEM 4: LATENCE ÉLEVÉE (HIGH LATENCY)
+
+### CAUSES:
+- Congestion transport (temps de délai élevé) - transport network congestion
+- Mauvais routage IP - suboptimal IP routing paths
+- Bufferbloat - excessive buffering in network nodes
+- Problème UPF / SGW - User Plane Function or Serving Gateway issues
+- RLC retransmissions - Radio Link Control layer retransmissions > 10%
+
+### SOLUTIONS:
+- Optimisation buffer - tune buffer sizes to reduce bloat
+- Upgrade transmission - increase backhaul capacity
+- Vérification MTU - verify Maximum Transmission Unit settings
+- Optimisation scheduling - improve packet scheduling algorithms
+- Local breakout - implement local internet breakout to reduce latency
+
+### KEY INDICATORS:
+- Latency > 80 ms = High latency problem
+- RLC retransmissions > 10% = Excessive retransmissions
+- Normal latency target: 10-30 ms
+
+
+## PROBLEM 5: SESSION DATA DROP
+
+### CAUSES:
+- ERAB drop - E-RAB (E-UTRAN Radio Access Bearer) drops
+- Mauvais HO inter-frequency (HO, taux de succès handover) - poor inter-frequency handover performance
+- Coverage hole (RSRP) - coverage gaps with RSRP < -115 dBm
+
+### SOLUTIONS:
+- Optimisation HO thresholds (accélérer HO, ajuster timer) - adjust handover trigger thresholds and timers
+- Ajuster timer T310 - tune T310 timer for radio link failure detection
+- Ajouter cellule 800 MHz - deploy 800 MHz coverage layer
+- Analyse drive test log (L3 events) - analyze Layer 3 signaling events from drive tests
+
+### KEY INDICATORS:
+- RSRP < -115 dBm = Coverage hole
+- Inter-frequency HO success < 90% = Handover optimization needed
+- ERAB drop rate > 2% = Bearer stability issue
+
+
+## PROBLEM 6: HANDOVER FAILURE
+
+### CAUSES:
+- Mauvaise définition voisins (dump, les relations de voisinage) - incorrect or incomplete neighbor definitions
+- Overshooting cell (cellule à large couverture) - cell coverage extends beyond optimal range
+- PCI confusion (identité de cellule confusion) - Physical Cell ID conflicts or confusion
+
+### SOLUTIONS:
+- Nettoyage PCI - clean up Physical Cell ID plan to avoid conflicts
+- Optimisation A3 offset - optimize A3 event offset parameters
+- Ajuster TTT (time to trigger) - tune Time-To-Trigger for handover events
+
+### KEY INDICATORS:
+- HO success rate < 85% = Handover failure problem
+- PCI collisions detected = Need PCI planning
+- Overshooting indicators = Coverage optimization needed
+
+
+## PROBLEM 7: PROBLÈMES DE CAPACITÉ (CAPACITY ISSUES)
+
+### SYMPTÔMES:
+- PRB > 85% - Physical Resource Block utilization exceeds threshold
+- CSSR baisse en heure chargée - Call Setup Success Rate drops during busy hour
+- Débit chute en busy hour - throughput degradation during peak traffic (17:00-21:00)
+
+### SOLUTIONS:
+- Ajout carrier - add additional carrier frequency
+- Activation CA (carrier agrégation) - enable Carrier Aggregation
+- Sectorisation 3 → 6 secteurs - increase sectorization from 3 to 6 sectors
+- Massive MIMO (augmenter MIMO) - deploy advanced MIMO configurations
+- Load balancing (réguler charge) - implement inter-cell load balancing
+
+### KEY INDICATORS:
+- PRB > 85% = Capacity threshold exceeded
+- Busy hour: 17:00-21:00 = Peak traffic period
+- Throughput drops > 40% during busy hour = Capacity bottleneck
+
+
+## GENERAL THRESHOLDS & DECISION RULES
+
+### SIGNAL QUALITY:
+- RSRP (Reference Signal Received Power):
+  * Excellent: > -80 dBm
+  * Good: -80 to -90 dBm
+  * Fair: -90 to -100 dBm
+  * Poor: -100 to -110 dBm
+  * Critical: < -110 dBm
+
+- SINR (Signal-to-Interference-plus-Noise Ratio):
+  * Excellent: > 20 dB
+  * Good: 15-20 dB
+  * Fair: 10-15 dB
+  * Poor: 5-10 dB
+  * Critical: < 5 dB
+
+### RESOURCE UTILIZATION:
+- PRB (Physical Resource Block) Utilization:
+  * Normal: < 70%
+  * Moderate: 70-85%
+  * High: 85-95%
+  * Critical: > 95%
+
+### VOICE QUALITY:
+- MOS (Mean Opinion Score):
+  * Excellent: 4.0-5.0
+  * Good: 3.5-4.0
+  * Fair: 3.0-3.5
+  * Poor: 2.5-3.0
+  * Bad: < 2.5
+
+### HANDOVER PERFORMANCE:
+- Handover Success Rate:
+  * Excellent: > 98%
+  * Good: 95-98%
+  * Fair: 90-95%
+  * Poor: 85-90%
+  * Critical: < 85%
+
+### THROUGHPUT:
+- Downlink Throughput:
+  * Good: > 50 Mbps
+  * Fair: 25-50 Mbps
+  * Poor: 10-25 Mbps
+  * Critical: < 10 Mbps
+
+### LATENCY:
+- Network Latency:
+  * Excellent: < 20 ms
+  * Good: 20-40 ms
+  * Fair: 40-80 ms
+  * Poor: 80-150 ms
+  * Critical: > 150 ms
+
+### ERROR RATES:
+- BLER (Block Error Rate):
+  * Normal: < 2%
+  * Moderate: 2-5%
+  * High: 5-10%
+  * Critical: > 10%
+
+
+## DIAGNOSTIC WORKFLOW
+
+### Step 1: Identify Primary Symptom
+- What is the user complaint? (call drops, slow data, poor voice quality, etc.)
+
+### Step 2: Gather KPI Evidence
+- Check RSRP, SINR, PRB, throughput, latency, BLER, MOS
+- Identify which KPIs are outside normal ranges
+
+### Step 3: Map to Problem Category
+- Use the 7 problem categories above
+- Consider time-of-day patterns (busy hour?)
+- Check for multiple concurrent issues
+
+### Step 4: Recommend Solutions
+- Prioritize quick wins (parameter optimization) before infrastructure changes
+- Consider cost-benefit (software optimization vs. hardware deployment)
+- Sequence solutions: optimization → tuning → capacity addition
+
+### Step 5: Validate & Monitor
+- After implementing solution, monitor KPIs for 24-48 hours
+- Verify improvement in target metrics
+- Document lessons learned
